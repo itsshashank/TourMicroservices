@@ -45,12 +45,24 @@ def add_package():
 
 @app.route('/viewPackageById/<int:id>',methods=['GET'])
 def get_package(id):
-    package = Package.query.get_or_404(id)
+    package = Package.query.get(id)
+    if package == None:
+        return "No package with the given id found"
     return package_schema.dump(package)
+
+@app.route('/viewPackageByCity/<string:city>',methods=['GET'])
+def get_package_c(city):
+    packages = Package.query.filter_by(city=city).all()
+    if packages == []:
+        return "No package found for given city"
+    return jsonify(packages_schema.dump(packages))
 
 @app.route('/updatePackage/<int:id>',methods=['PUT'])
 def update_package(id):
-    package = Package.query.get_or_404(id)
+    package = Package.query.get(id)
+
+    if package == None:
+        return "Updation failed due to invalid id"
 
     if 'city' in request.json:
         package.city = request.json['city']
@@ -61,9 +73,11 @@ def update_package(id):
     db.session.commit()
     return 'Package with id='+str(id)+' updated sucessfully'
 
-@app.route('/deletePackage/<int:id',methods=['DELETE'])
+@app.route('/deletePackage/<int:id>',methods=['DELETE'])
 def delete_package(id):
-    package = Package.query.get_or_404(id)
+    package = Package.query.get(id)
+    if package == None:
+        return "Deletion failed due to invalid id"
     db.session.delete(package)
     db.session.commit()
     return 'Package with id='+str(id)+' deleted sucessfully'
