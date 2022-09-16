@@ -36,7 +36,7 @@ language-selector==0.1
 launchpadlib==1.10.13
 lazr.restfulclient==0.14.2
 lazr.uri==1.0.3
-Mako==1.1.3
+Mako==1.2.2
 MarkupSafe==1.1.0
 marshmallow==3.7.1
 marshmallow-sqlalchemy==0.23.1
